@@ -10,4 +10,3 @@ First you are required to fill `login.py` with your ID and password. Then run th
 
 ## To-do
 - [ ] GUI
-- [ ] RegExp
