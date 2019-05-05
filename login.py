@@ -1,4 +1,5 @@
 import requests
+import re
 from urllib import parse
 
 def status(url):
@@ -14,10 +15,16 @@ def status(url):
 resp = status('http://123.123.123.123')
 referer = ''
 qs = ''
+p1 = re.compile("='(.*?)'</script>")
+p2 = re.compile("jsp\?(.*?)'</script>")
 
 if resp != None:
-	referer = resp[32:506]
-	qs = parse.quote(resp[77:506])
+	referer = re.findall(p1, resp)
+	qs = re.findall(p2,resp)
+
+qstr = "".join(qs)
+qstr = parse.quote(qstr)
+referer2 = "".join(referer)
 
 header = {
 	'Host': '202.118.253.94:8080',
@@ -27,7 +34,7 @@ header = {
 	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36',
 	'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
 	'Accept': '*/*',
-	'Referer': referer,
+	'Referer': referer2,
 	'Accept-Encoding': 'gzip, deflate',
 	'Accept-Language': 'zh-CN,zh;q=0.9'
 }
@@ -36,7 +43,7 @@ postdata = {
 	'userId':'',
 	'password':'',
 	'service':'',
-	'queryString': qs,
+	'queryString': qstr,
 	'operatorPwd':'',
 	'operatorUserId':'',
 	'validcode':'',
